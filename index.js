@@ -1,20 +1,21 @@
 'use strict';
-var util = require('util');
-
 var request = require('request'),
+  _ = require('lodash'),
   tough = require('tough-cookie');
 
-var extend = util._extend,
-  initParams = require('./lib/helpers').initParams,
+var initParams = require('./lib/helpers').initParams,
+  parseUri = require('./lib/helpers').parseUri,
   makeRequestCallback = require('./lib/helpers').makeRequestCallback,
   applyPlugins = require('./lib/helpers').applyPlugins;
 
 function OniyiHttpClient(options) {
   var self = this;
-  options = extend({}, options || {});
+  options = _.merge({
+    requestOptions: {}
+  }, options || {});
 
   self.plugins = [];
-  self._request = (options.requestOptions) ? request.defaults(options.requestOptions) : request;
+  self.requestOptions = options.requestOptions;
 }
 
 OniyiHttpClient.prototype.registerPlugin = function(plugin) {
@@ -52,8 +53,9 @@ OniyiHttpClient.prototype.makeRequest = function(uri, options, callback) {
   var self = this;
 
   // initialize provided arguments into params object
-  var originalParams = initParams(uri, options, callback);
+  var originalParams = _.merge({}, self.requestOptions, initParams(uri, options, callback));
 
+  originalParams = parseUri(originalParams);
   // let plugins manipulate the params object
   applyPlugins(self.plugins, originalParams, function(err, params) {
   	if (err) {
@@ -63,12 +65,12 @@ OniyiHttpClient.prototype.makeRequest = function(uri, options, callback) {
 
   	// make a clone of the params after all plugins are done manipulating
   	// and remove pluginData from the clone
-  	var requestParams = extend({}, params);
-  	delete requestParams.pluginData;
+  	var requestParams = _.omit(params, ['pluginData']);
+    requestParams.callback = makeRequestCallback(self.plugins, params.pluginData, originalParams.callback);
 
   	// call our own request object with the params we have by now
   	// provide callback that will initiate the callback function of each plugin in reverse order
-    return self._request(requestParams, makeRequestCallback(self.plugins, params.pluginData, originalParams.callback));
+    return new request.Request(requestParams);
   });
 };
 

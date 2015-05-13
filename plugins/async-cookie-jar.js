@@ -1,11 +1,9 @@
 'use strict';
 
-var util = require('util');
-
-var async = require('async'),
+var _ = require('lodash'),
+  async = require('async'),
   request = require('request');
 
-var extend = util._extend;
 var requestJarPrototype = Object.getPrototypeOf(request.jar());
 
 function putCookiesInJar(setCookieHeaders, completeRequestURI, cookieJar, callback) {
@@ -43,7 +41,7 @@ module.exports = {
       }
 
       // copy params and remove cookieJar from the copy
-      var newParams = extend({}, params);
+      var newParams = _.merge({}, params);
       delete newParams.jar;
 
       // write cookies from jar to the request headers,
