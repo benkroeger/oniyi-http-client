@@ -3,10 +3,54 @@ var request = require('request'),
   _ = require('lodash'),
   tough = require('tough-cookie');
 
+
+// local variable definitions
 var initParams = require('./lib/helpers').initParams,
   parseUri = require('./lib/helpers').parseUri,
   makeRequestCallback = require('./lib/helpers').makeRequestCallback,
   applyPlugins = require('./lib/helpers').applyPlugins;
+
+var requestValidParameters = [
+  'uri',
+  'baseUrl',
+  'method',
+  'headers',
+  'auth',
+  'qs',
+  'qsParseOptions',
+  'qsStringifyOptions',
+  'useQuerystring',
+  'body',
+  'form',
+  'formData',
+  'multipart',
+  'preambleCRLF',
+  'postambleCRLF',
+  'json',
+  'jsonReviver',
+  'auth',
+  'oauth',
+  'hawk',
+  'aws',
+  'httpSignature',
+  'followRedirect',
+  'followAllRedirects',
+  'maxRedirects',
+  'encoding',
+  'gzip',
+  'jar',
+  'pool',
+  'timeout',
+  'localAddress',
+  'proxy',
+  'strictSSL',
+  'agentOptions',
+  'tunnel',
+  'proxyHeaderWhiteList',
+  'proxyHeaderExclusiveList',
+  'time',
+  'har'
+];
 
 function OniyiHttpClient(options) {
   var self = this;
@@ -20,7 +64,7 @@ function OniyiHttpClient(options) {
 
 OniyiHttpClient.prototype.registerPlugin = function(plugin) {
   var self = this;
-  
+
   // make sure we have an array to push plugins to
   if (!Array.isArray(self.plugins)) {
     self.plugins = [];
@@ -28,8 +72,8 @@ OniyiHttpClient.prototype.registerPlugin = function(plugin) {
 
   // if only a string is provided, load built-in plugin from our own plugins folder
   if (typeof plugin === 'string') {
-  	self.plugins.push(require('./plugins/' + plugin));
-  	return self;
+    self.plugins.push(require('./plugins/' + plugin));
+    return self;
   }
 
   // otherwise assume, plugin is a valid plugin
@@ -49,27 +93,38 @@ OniyiHttpClient.prototype.jar = function(store) {
   return new tough.CookieJar(store);
 };
 
-OniyiHttpClient.prototype.makeRequest = function(uri, options, callback) {
+OniyiHttpClient.prototype.extractRequestParams = function(params, omit) {
+  if (!params) {
+    return {};
+  }
+  var requestParams = _.pick(params, requestValidParameters);
+  if (Array.isArray(omit)) {
+    return _.omit(requestParams, omit);
+  }
+  return requestParams;
+};
+
+OniyiHttpClient.prototype.makeRequest = function() {
   var self = this;
 
   // initialize provided arguments into params object
-  var originalParams = _.merge({}, self.requestOptions, initParams(uri, options, callback));
+  var originalParams = _.merge({}, self.requestOptions, initParams.apply(null, arguments));
 
   originalParams = parseUri(originalParams);
   // let plugins manipulate the params object
   applyPlugins(self.plugins, originalParams, function(err, params) {
-  	if (err) {
-  		// something went wrong in one of the plugins
-  		return originalParams.callback(err);
-  	}
+    if (err) {
+      // something went wrong in one of the plugins
+      return originalParams.callback(err);
+    }
 
-  	// make a clone of the params after all plugins are done manipulating
-  	// and remove pluginData from the clone
-  	var requestParams = _.omit(params, ['pluginData']);
+    // make a clone of the params after all plugins are done manipulating
+    // and remove pluginData from the clone
+    var requestParams = _.omit(params, ['pluginData']);
     requestParams.callback = makeRequestCallback(self.plugins, params.pluginData, originalParams.callback);
 
-  	// call our own request object with the params we have by now
-  	// provide callback that will initiate the callback function of each plugin in reverse order
+    // call our own request object with the params we have by now
+    // provide callback that will initiate the callback function of each plugin in reverse order
     return new request.Request(requestParams);
   });
 };
