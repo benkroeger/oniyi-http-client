@@ -62,6 +62,8 @@ client.makeRequest('https://www.npmjs.com', {
 ```
 
 
+only async onRequest functions can abort the request execution and send response and body data to the callback
+
 ## License
 
 MIT © [Benjamin Kroeger]()

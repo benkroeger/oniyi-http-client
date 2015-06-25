@@ -112,10 +112,22 @@ OniyiHttpClient.prototype.makeRequest = function() {
 
   originalParams = parseUri(originalParams);
   // let plugins manipulate the params object
-  applyPlugins(self.plugins, originalParams, function(err, params) {
+  applyPlugins(self.plugins, originalParams, function(err, params, response, body) {
     if (err) {
       // something went wrong in one of the plugins
       return originalParams.callback(err);
+    }
+
+    if (response && body !== undefined) {
+      var currentPluginIndex = self.plugins.map(function(plugin){
+        return plugin.name;
+      }).indexOf(params.currentPlugin);
+
+      var plugins = self.plugins.slice(currentPluginIndex - 1);
+
+      var callback = makeRequestCallback(plugins, params.pluginData, originalParams.callback);
+
+      return callback(null, response, body);
     }
 
     // make a clone of the params after all plugins are done manipulating
