@@ -121,9 +121,12 @@ OniyiHttpClient.prototype.makeRequest = function() {
     if (response && body !== undefined) {
       var currentPluginIndex = self.plugins.map(function(plugin){
         return plugin.name;
-      }).indexOf(params.currentPlugin);
+      }).indexOf(params.currentPlugin) - 1;
 
-      var plugins = self.plugins.slice(currentPluginIndex - 1);
+      var plugins = [];
+      if (currentPluginIndex > self.plugins.length) {
+        plugins = self.plugins.slice(0, currentPluginIndex);
+      }
 
       var callback = makeRequestCallback(plugins, params.pluginData, originalParams.callback);
 
