@@ -1,72 +1,106 @@
-#  [![NPM version][npm-image]][npm-url]  [![Dependency Status][daviddm-image]][daviddm-url]
+# oniyi-http-client [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
+> Adding a plugin interface to &#34;request&#34; that allows modifications of request parameters and response data
 
-> Adding a plugin interface to "request" that allows modifications of request parameters and response data.
-
-
-## Why?
-
-Working with the popular module [request](https://github.com/request/request) for your http requests is awesome. But sometimes you might need to go beyond the standard features.
-
-## Install
+## Installation
 
 ```sh
 $ npm install --save oniyi-http-client
 ```
 
-
 ## Usage
 
 ```js
-var tough = require('tough-cookie');
 var OniyiHttpClient = require('oniyi-http-client');
 
-var client = new OniyiHttpClient();
-
-client.registerPlugin('async-cookie-jar')
-	// a plugin that only adds a request header and returns the params object synchronusly
-	.registerPlugin({
-    name: 'plugin-1',
-    onRequest: function(params) {
-      params.headers = params.headers || {};
-      params.headers.foo = 'bar';
-      return params;
+var client = new OniyiHttpClient({
+  defaults: {
+    headers: {
+      'Accept-Language': 'en-US,en;q=0.8',
+      Host: 'httpbin.org',
+      'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
     }
-  })
-  // this plugin wwill add a header and store some data in it's own storage
-  // setTimeout is used to simulate async callback of the params object
-  .registerPlugin({
-    name: 'plugin-2',
-    storesData: true, // this has to be set to true if the plugin wants to use a storage
-    onRequest: function(params, store, callback) {
-      setTimeout(function() {
-        params.headers = params.headers || {};
-        params.headers['plugin-2'] = 'plugin-2';
-        store.name = 'Bam Bam!';
-        callback(null, params);
-      }, 500);
-    },
-    // in callback, this plugin has access to it's storage again
-    callback: function(next, store, err, response, body) {
-      console.log('Name in this plugin\'s store: %s', store.name);
-      // pass arguments on to the next plugin
-      next.call(this, err, response, body);
-    }
-  });
-
-client.makeRequest('https://www.npmjs.com', {
-	jar: new tough.CookieJar(asyncStore)
-}, function(err, response, body){
-	// do your normal response handling here
+  }
 });
 
+client.makeRequest('http://httpbin.org/headers', {
+  method: 'GET'
+  // jar: client.jar(new redisStore(redisClient))
+}, function (err, response, body) {
+  if (err) {
+    logger.warn('got an error');
+    if (err.stack) {
+      logger.error(err.stack);
+    } else {
+      logger.error(err);
+    }
+    process.exit(0);
+  }
+  if (response) {
+    logger.debug('statusCode: %d', response.statusCode);
+    logger.debug('headers: ', response.headers);
+    logger.debug('body: ', body);
+  }
+  process.exit(0);
+});
 ```
 
+## Using plugins
 
-only async onRequest functions can abort the request execution and send response and body data to the callback
+This creates a plugin named `plugin-2` which adds a request-header with name and value `plugin-2`.
+Also, it stores some data in a local variable and overrides the original callback function 
+to print that stored data on response. Afterwards it calls the original callback function.
 
+```js
+var plugin2 = {
+  name: 'plugin-2',
+  load: function (params, callback) {
+    var plugin2Storage = {};
+    setTimeout(function () {
+      params.headers = params.headers || {};
+      params.headers['plugin-2'] = 'plugin-2';
+
+      var name = 'Bam Bam!';
+
+      var originalCallback = params.callback;
+
+      params.callback = function (err, response, body) {
+        logger.info('Name in this plugin\'s store: %s', name);
+        return originalCallback(err, response, body);
+      };
+
+      callback(null, params);
+    }, 500);
+  }
+};
+
+client
+  .registerPlugin(plugin2)
+  .makeRequest('http://httpbin.org/headers', {
+    method: 'GET'
+    // jar: client.jar(new redisStore(redisClient))
+  }, function (err, response, body) {
+    if (err) {
+      logger.warn('got an error');
+      if (err.stack) {
+        logger.error(err.stack);
+      } else {
+        logger.error(err);
+      }
+      process.exit(0);
+    }
+    if (response) {
+      logger.debug('statusCode: %d', response.statusCode);
+      logger.debug('headers: ', response.headers);
+      logger.debug('body: ', body);
+    }
+    process.exit(0);
+  });
+
+```
 ## License
 
-MIT © [Benjamin Kroeger]()
+Apache-2.0 © [Benjamin Kroeger]()
 
 
 [npm-image]: https://badge.fury.io/js/oniyi-http-client.svg
@@ -75,3 +109,5 @@ MIT © [Benjamin Kroeger]()
 [travis-url]: https://travis-ci.org/benkroeger/oniyi-http-client
 [daviddm-image]: https://david-dm.org/benkroeger/oniyi-http-client.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/benkroeger/oniyi-http-client
+[coveralls-image]: https://coveralls.io/repos/benkroeger/oniyi-http-client/badge.svg
+[coveralls-url]: https://coveralls.io/r/benkroeger/oniyi-http-client

@@ -1,3 +1,2 @@
-/node_modules/
-npm-debug.log
-dump.rdb
+node_modules
+coverage

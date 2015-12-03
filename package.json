@@ -1,44 +1,44 @@
 {
   "name": "oniyi-http-client",
-  "version": "0.0.1",
-  "description": "Adding a plugin interface to \"request\" that allows modifications of request parameters and response data.",
+  "version": "0.0.2",
+  "description": "Adding a plugin interface to \"request\" that allows modifications of request parameters and response data",
+  "homepage": "",
   "author": {
     "name": "Benjamin Kroeger",
-    "email": "benjamin.kroeger@gmail.com"
+    "email": "benjamin.kroeger@gmail.com",
+    "url": ""
   },
-  "repository": "benkroeger/oniyi-http-client",
-  "license": "MIT",
   "files": [
-    "index.js",
     "lib",
     "plugins"
   ],
+  "main": "lib/index.js",
   "keywords": [
-    "oniyi-http-client",
     "request",
-    "http",
-    "rest",
-    "api",
-    "client",
-    "plugin"
+    "plugin",
+    "http"
   ],
-  "dependencies": {
-    "async": "^1.2.1",
-    "lodash": "^3.9.3",
-    "request": "^2.58.0",
-    "tough-cookie": "^1.1.0"
-  },
+  "repository": "git@github.com:benkroeger/oniyi-http-client.git",
   "devDependencies": {
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-jshint": "^0.11.0",
-    "grunt-contrib-nodeunit": "^0.4.1",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-mocha-cli": "^1.12.0",
-    "jshint-stylish": "^1.0.1",
-    "load-grunt-tasks": "^3.1.0",
-    "time-grunt": "^1.1.0"
+    "gulp": "^3.6.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-exclude-gitignore": "^1.0.0",
+    "gulp-istanbul": "^0.9.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-plumber": "^1.0.0",
+    "gulp-nsp": "^2.1.0",
+    "gulp-coveralls": "^0.1.0"
   },
   "scripts": {
-    "test": "grunt"
+    "prepublish": "gulp prepublish",
+    "test": "gulp"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "async": "1.5.0",
+    "lodash": "3.10.1",
+    "oniyi-logger": "0.2.0",
+    "request": "2.67.0",
+    "tough-cookie": "2.2.1"
   }
 }
