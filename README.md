@@ -1,5 +1,4 @@
-[![NPM info](https://nodei.co/npm/oniyi-http-client.png?downloads=true)](https://nodei.co/npm/oniyi-http-client.png?downloads=true)
-[![dependencies](https://david-dm.org/benkroeger/oniyi-http-client.png)](https://david-dm.org/benkroeger/oniyi-http-client.png)
+[![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 
 # oniyi-http-client 
 > Adding a plugin interface to &#34;request&#34; that allows modifications of request parameters and response data
