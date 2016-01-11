@@ -10,6 +10,8 @@ $ npm install --save oniyi-http-client
 
 ## Usage
 
+**Note:** this module does not support streams, yet
+
 ```js
 var OniyiHttpClient = require('oniyi-http-client');
 
@@ -55,7 +57,7 @@ to print that stored data on response. Afterwards it calls the original callback
 ```js
 var plugin2 = {
   name: 'plugin-2',
-  load: function (params, callback) {
+  load: function (req, params, callback) {
     var plugin2Storage = {};
     setTimeout(function () {
       params.headers = params.headers || {};
@@ -76,7 +78,7 @@ var plugin2 = {
 };
 
 client
-  .registerPlugin(plugin2)
+  .use(plugin2)
   .makeRequest('http://httpbin.org/headers', {
     method: 'GET'
     // jar: client.jar(new redisStore(redisClient))

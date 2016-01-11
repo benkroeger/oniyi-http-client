@@ -1,5 +1,6 @@
 'use strict';
 
+process.env.NODE_DEBUG = 'oniyi-http-client:test';
 var logger = require('oniyi-logger')('oniyi-http-client:test');
 
 var OniyiHttpClient = require('../');
@@ -21,7 +22,7 @@ var client = new OniyiHttpClient({
 
 var plugin1 = {
   name: 'plugin-1',
-  load: function (params) {
+  load: function (req, params) {
     params.headers = params.headers || {};
     params.headers.foo = 'bar';
     return params;
@@ -30,7 +31,7 @@ var plugin1 = {
 
 var plugin2 = {
   name: 'plugin-2',
-  load: function (params, callback) {
+  load: function (req, params, callback) {
     var plugin2Storage = {};
     setTimeout(function () {
       params.headers = params.headers || {};
@@ -52,7 +53,7 @@ var plugin2 = {
 
 var plugin3 = {
   name: 'plugin-3',
-  load: function (params, callback) {
+  load: function (req, params, callback) {
     setTimeout(function () {
       params.headers = params.headers || {};
       params.headers['plugin-3'] = 'plugin-3';
@@ -63,7 +64,7 @@ var plugin3 = {
 
 var plugin4 = {
   name: 'plugin-4',
-  load: function (params, callback) {
+  load: function (req, params, callback) {
     var plugin4Storage = {};
     setTimeout(function () {
       params.headers = params.headers || {};
@@ -84,13 +85,14 @@ var plugin4 = {
 };
 
 client
-  .registerPlugin(plugin1)
-  .registerPlugin(plugin2)
-  .registerPlugin(plugin3)
-  .registerPlugin(plugin4)
-  .registerPlugin('async-cookie-jar');
+  .use(plugin1)
+  .use(plugin2)
+  .use(plugin3)
+  .use(plugin4)
+  .use('async-cookie-jar');
 
-client.makeRequest('http://httpbin.org/headers', {
+client.makeRequest('http://httpbin.org/cookies/set?name=value', {
+// client.makeRequest('http://httpbin.org/headers', {
   method: 'GET'
     // jar: client.jar(new redisStore(redisClient))
 }, function (err, response, body) {

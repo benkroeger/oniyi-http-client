@@ -24,7 +24,7 @@ function isRequestJar(jar) {
 
 module.exports = {
   name: 'async-cookie-jar',
-  load: function (params, callback) {
+  load: function (req, params, callback) {
     // skip if we have a cookie jar that can be handled by the request module
     if (isRequestJar(params.jar)) {
       return callback(null, params);
@@ -32,15 +32,13 @@ module.exports = {
 
     var cookieJar = params.jar;
 
-    var originalCallback = params.callback;
-
     // retrieve cookies from jar asynchronously
     cookieJar.getCookieString(params.uri.href, function (err, cookieString) {
       if (err) {
         return callback(err);
       }
 
-      // remove cookieJar from the params
+      // remove cookieJar from the params so that "request" doesn't try to handle it
       delete params.jar;
 
       // write cookies from jar to the request headers,
@@ -48,26 +46,20 @@ module.exports = {
       params.headers = params.headers || {};
       params.headers.cookie = cookieString + (params.headers.cookie ? '; ' + params.headers.cookie : '');
 
-      params.callback = function (error, response, body) {
-        if (error || !cookieJar) {
-          return originalCallback(error, response, body);
-        }
-
+      // the "response" event is emitted on each response, that includes redirects
+      req.on('response', function (response) {
         // do we have a response object including the set-cookie header
         if (response && response.headers && response.headers['set-cookie']) {
           var completeRequestURI = response.request.uri.href;
 
+          // write received cookies to our jar
           return putCookiesInJar(response.headers['set-cookie'], completeRequestURI, cookieJar, function (cookieErr) {
             if (cookieErr) {
-              return originalCallback(cookieErr, response, body);
+              return req.emit('error', cookieErr);
             }
-
-            return originalCallback(err, response, body);
           });
         }
-
-        originalCallback(err, response, body);
-      };
+      });
 
       return callback(null, params);
     });
