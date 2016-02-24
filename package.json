@@ -1,6 +1,6 @@
 {
   "name": "oniyi-http-client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Adding a plugin interface to \"request\" that allows modifications of request parameters and response data",
   "homepage": "",
   "author": {
@@ -20,10 +20,11 @@
   ],
   "repository": "git@github.com:benkroeger/oniyi-http-client.git",
   "devDependencies": {
+    "eslint": "^1.0.0",
     "gulp": "^3.6.0",
     "gulp-eslint": "^1.0.0",
     "gulp-exclude-gitignore": "^1.0.0",
-    "gulp-istanbul": "^0.9.0",
+    "gulp-istanbul": "^0.10.3",
     "gulp-mocha": "^2.0.0",
     "gulp-plumber": "^1.0.0",
     "gulp-nsp": "^2.1.0",
@@ -35,10 +36,10 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "async": "1.5.0",
-    "lodash": "3.10.1",
-    "oniyi-logger": "0.2.2",
-    "request": "2.67.0",
+    "async": "^1.5.2",
+    "lodash": "^4.5.1",
+    "oniyi-logger": "^0.3.1",
+    "request": "2.69.0",
     "tough-cookie": "2.2.1"
   }
 }
