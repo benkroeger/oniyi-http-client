@@ -1,6 +1,6 @@
 # oniyi-http-client  
 [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]  
-> Adding a plugin interface to &#34;request&#34; that allows modifications of request parameters and response data
+> Adding a plugin interface to [request](https://www.npmjs.com/package/request) that allows modifications of request parameters and response data
 
 ## Installation
 
