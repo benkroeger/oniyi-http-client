@@ -1,87 +1,93 @@
 'use strict';
 
 process.env.NODE_DEBUG = 'oniyi-http-client:test';
-var logger = require('oniyi-logger')('oniyi-http-client:test');
+const logger = require('oniyi-logger')('oniyi-http-client:test');
+const _ = require('lodash');
+const OniyiHttpClient = require('../');
+// const redisStore = require('tough-cookie-redis-store');
+// const makeRedisClient = require('make-redis-client');
 
-var OniyiHttpClient = require('../');
-// var redisStore = require('tough-cookie-redis-store');
-// var makeRedisClient = require('make-redis-client');
+// const redisClient = new makeRedisClient({});
 
-// var redisClient = new makeRedisClient({});
-
-var client = new OniyiHttpClient({
+const client = new OniyiHttpClient({
   defaults: {
     headers: {
       'Accept-Language': 'en-US,en;q=0.8',
       Host: 'httpbin.org',
       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-    }
-  }
+      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    },
+  },
 });
 
-var plugin1 = {
+const plugin1 = {
   name: 'plugin-1',
-  load: function (req, params) {
-    params.headers = params.headers || {};
-    params.headers.foo = 'bar';
-    return params;
-  }
+  load: (req, params) => {
+    return _.merge({}, params, {
+      headers: {
+        foo: 'bar',
+      },
+    });
+  },
 };
 
-var plugin2 = {
+const plugin2 = {
   name: 'plugin-2',
-  load: function (req, params, callback) {
-    var plugin2Storage = {};
-    setTimeout(function () {
-      params.headers = params.headers || {};
-      params.headers['plugin-2'] = 'plugin-2';
-
+  load: (req, params, callback) => {
+    const plugin2Storage = {};
+    setTimeout(() => {
       plugin2Storage.name = 'Bam Bam!';
 
-      var originalCallback = params.callback;
+      const originalCallback = params.callback;
+      const newParams = _.merge({}, params, {
+        headers: {
+          'plugin-2': 'plugin-2',
+        },
+        callback: (err, response, body) => {
+          logger.info('Name in this plugin\'s store: %s', plugin2Storage.name);
+          return originalCallback(err, response, body);
+        },
+      });
 
-      params.callback = function (err, response, body) {
-        logger.info('Name in this plugin\'s store: %s', plugin2Storage.name);
-        return originalCallback(err, response, body);
-      };
-
-      callback(null, params);
+      callback(null, newParams);
     }, 500);
-  }
+  },
 };
 
-var plugin3 = {
+const plugin3 = {
   name: 'plugin-3',
-  load: function (req, params, callback) {
-    setTimeout(function () {
-      params.headers = params.headers || {};
-      params.headers['plugin-3'] = 'plugin-3';
-      callback(null, params);
+  load: (req, params, callback) => {
+    setTimeout(() => {
+      callback(null, _.merge({}, params, {
+        headers: {
+          'plugin-3': 'plugin-3',
+        },
+      }));
     }, 500);
-  }
+  },
 };
 
-var plugin4 = {
+const plugin4 = {
   name: 'plugin-4',
-  load: function (req, params, callback) {
-    var plugin4Storage = {};
-    setTimeout(function () {
-      params.headers = params.headers || {};
-      params.headers.foo = 'baz';
-      params.headers['plugin-4'] = 'plugin-4';
-
+  load: (req, params, callback) => {
+    const plugin4Storage = {};
+    setTimeout(() => {
       plugin4Storage.name = 'Fred!';
+      const originalCallback = params.callback;
 
-      var originalCallback = params.callback;
-
-      params.callback = function (err, response, body) {
-        logger.info('Name in this plugin\'s store: %s', plugin4Storage.name);
-        return originalCallback(err, response, body);
-      };
-      callback(null, params);
+      const newParams = _.merge({}, params, {
+        headers: {
+          foo: 'baz',
+          'plugin-4': 'plugin-4',
+        },
+        callback: (err, response, body) => {
+          logger.info('Name in this plugin\'s store: %s', plugin4Storage.name);
+          return originalCallback(err, response, body);
+        },
+      });
+      callback(null, newParams);
     }, 500);
-  }
+  },
 };
 
 client
@@ -91,11 +97,11 @@ client
   .use(plugin4)
   .use('async-cookie-jar');
 
-client.makeRequest('http://httpbin.org/cookies/set?name=value', {
-// client.makeRequest('http://httpbin.org/headers', {
-  method: 'GET'
+// client.makeRequest('http://httpbin.org/cookies/set?name=value', {
+client.makeRequest('http://httpbin.org/headers', {
+  method: 'GET',
     // jar: client.jar(new redisStore(redisClient))
-}, function (err, response, body) {
+}, (err, response, body) => {
   if (err) {
     logger.warn('got an error');
     if (err.stack) {
