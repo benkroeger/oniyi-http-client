@@ -3,19 +3,18 @@
 process.env.NODE_DEBUG = 'oniyi-http-client:test';
 const logger = require('oniyi-logger')('oniyi-http-client:test');
 const _ = require('lodash');
-const OniyiHttpClient = require('../');
+const oniyiHttpClient = require('../');
 // const redisStore = require('tough-cookie-redis-store');
 // const makeRedisClient = require('make-redis-client');
 
 // const redisClient = new makeRedisClient({});
 
-const client = new OniyiHttpClient({
+const client = oniyiHttpClient({
   defaults: {
+    baseUrl: 'http://httpbin.org',
     headers: {
       'Accept-Language': 'en-US,en;q=0.8',
       Host: 'httpbin.org',
-      'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     },
   },
 });
@@ -45,6 +44,7 @@ const plugin2 = {
         },
         callback: (err, response, body) => {
           logger.info('Name in this plugin\'s store: %s', plugin2Storage.name);
+          logger.info(err);
           return originalCallback(err, response, body);
         },
       });
@@ -98,12 +98,11 @@ client
   .use('async-cookie-jar');
 
 // client.makeRequest('http://httpbin.org/cookies/set?name=value', {
-client.makeRequest('http://httpbin.org/headers', {
+client.makeRequest('/headers', {
   method: 'GET',
     // jar: client.jar(new redisStore(redisClient))
 }, (err, response, body) => {
   if (err) {
-    logger.warn('got an error');
     if (err.stack) {
       logger.error(err.stack);
     } else {
