@@ -1,6 +1,6 @@
 {
   "name": "oniyi-http-client",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Adding a plugin interface to \"request\" that allows modifications of request parameters and response data",
   "homepage": "",
   "author": {
