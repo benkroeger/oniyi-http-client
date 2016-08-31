@@ -21,13 +21,11 @@ const client = oniyiHttpClient({
 
 const plugin1 = {
   name: 'plugin-1',
-  load: (req, params) => {
-    return _.merge({}, params, {
-      headers: {
-        foo: 'bar',
-      },
-    });
-  },
+  load: (req, params) => _.merge({}, params, {
+    headers: {
+      foo: 'bar',
+    },
+  }),
 };
 
 const plugin2 = {
@@ -100,7 +98,7 @@ client
 // client.makeRequest('http://httpbin.org/cookies/set?name=value', {
 client.makeRequest('/headers', {
   method: 'GET',
-    // jar: client.jar(new redisStore(redisClient))
+  // jar: client.jar(new redisStore(redisClient))
 }, (err, response, body) => {
   if (err) {
     if (err.stack) {
