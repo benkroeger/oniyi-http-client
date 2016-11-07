@@ -20,8 +20,8 @@
   ],
   "repository": "git@github.com:benkroeger/oniyi-http-client.git",
   "devDependencies": {
-    "eslint": "3.3.1",
-    "eslint-config-oniyi": "4.1.0",
+    "eslint": "^3.5.0",
+    "eslint-config-oniyi": "^4.2.0",
     "gulp": "3.9.1",
     "gulp-coveralls": "0.1.4",
     "gulp-eslint": "3.0.1",
@@ -39,8 +39,8 @@
   "dependencies": {
     "async": "2.0.1",
     "lodash": "4.15.0",
-    "oniyi-logger": "0.4.2",
-    "request": "2.74.0",
-    "tough-cookie": "2.3.1"
+    "oniyi-logger": "^1.0.0",
+    "request": "^2.78.0",
+    "tough-cookie": "^2.3.2"
   }
 }
