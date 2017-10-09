@@ -1,5 +1,5 @@
 # oniyi-http-client  
-[![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]  
+[![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > Adding a plugin interface to [request](https://www.npmjs.com/package/request) that allows modifications of request parameters and response data
 
 ## Installation
@@ -51,7 +51,7 @@ client.makeRequest('http://httpbin.org/headers', {
 ## Using plugins
 
 This creates a plugin named `plugin-2` which adds a request-header with name and value `plugin-2`.
-Also, it stores some data in a local variable and overrides the original callback function 
+Also, it stores some data in a local variable and overrides the original callback function
 to print that stored data on response. Afterwards it calls the original callback function.
 
 ```js
@@ -103,14 +103,10 @@ client
 ```
 ## License
 
-Apache-2.0 © [Benjamin Kroeger]()
+MIT © [Benjamin Kroeger]()
 
 
 [npm-image]: https://badge.fury.io/js/oniyi-http-client.svg
 [npm-url]: https://npmjs.org/package/oniyi-http-client
-[travis-image]: https://travis-ci.org/benkroeger/oniyi-http-client.svg?branch=master
-[travis-url]: https://travis-ci.org/benkroeger/oniyi-http-client
 [daviddm-image]: https://david-dm.org/benkroeger/oniyi-http-client.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/benkroeger/oniyi-http-client
-[coveralls-image]: https://coveralls.io/repos/benkroeger/oniyi-http-client/badge.svg
-[coveralls-url]: https://coveralls.io/r/benkroeger/oniyi-http-client
