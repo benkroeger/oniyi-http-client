@@ -1,24 +1,17 @@
 {
   "name": "oniyi-http-client",
   "version": "1.1.1",
-  "description": "Adding a plugin interface to \"request\" that allows modifications of request parameters and response data",
-  "homepage": "",
-  "author": {
-    "name": "Benjamin Kroeger",
-    "email": "benjamin.kroeger@gmail.com",
-    "url": ""
-  },
-  "files": [
-    "lib",
-    "plugins"
-  ],
+  "description":
+    "Adding a plugin interface to \"request\" that allows modifications of request parameters and response data",
+  "homepage": "https://github.com/benkroeger/oniyi-http-client#readme",
+  "author": "Benjamin Kroeger <benjamin.kroeger@gmail.com>",
+  "files": ["lib", "plugins"],
   "main": "lib/index.js",
-  "keywords": [
-    "request",
-    "plugin",
-    "http"
-  ],
-  "repository": "git@github.com:benkroeger/oniyi-http-client.git",
+  "keywords": ["request", "plugin", "http"],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/benkroeger/oniyi-http-client.git"
+  },
   "devDependencies": {
     "eslint": "^4.8.0",
     "eslint-config-oniyi": "^5.0.2"
@@ -28,10 +21,16 @@
   },
   "license": "MIT",
   "dependencies": {
-    "async": "2.0.1",
-    "lodash": "4.15.0",
+    "async": "^2.5.0",
+    "lodash": "^4.17.4",
     "oniyi-logger": "^1.0.0",
     "request": "^2.78.0",
     "tough-cookie": "^2.3.2"
+  },
+  "bugs": {
+    "url": "https://github.com/benkroeger/oniyi-http-client/issues"
+  },
+  "directories": {
+    "test": "test"
   }
 }
