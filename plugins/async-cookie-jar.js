@@ -64,12 +64,10 @@ module.exports = {
               req.emit('error', cookieErr);
             }
           });
-          return;
         }
       });
 
       callback(null, params);
-      return;
     });
   },
 };

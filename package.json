@@ -20,10 +20,11 @@
   ],
   "repository": "git@github.com:benkroeger/oniyi-http-client.git",
   "devDependencies": {
-    "eslint": "^3.5.0",
-    "eslint-config-oniyi": "^4.2.0",
+    "eslint": "^4.8.0",
+    "eslint-config-oniyi": "^5.0.2"
   },
   "scripts": {
+    "lint": "eslint --ignore-path .gitignore ."
   },
   "license": "MIT",
   "dependencies": {
