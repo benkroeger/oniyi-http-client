@@ -1,13 +1,19 @@
 {
   "name": "oniyi-http-client",
-  "version": "1.1.1",
-  "description":
-    "Adding a plugin interface to \"request\" that allows modifications of request parameters and response data",
+  "version": "1.2.0",
+  "description": "Adding a plugin interface to \"request\" that allows modifications of request parameters and response data",
   "homepage": "https://github.com/benkroeger/oniyi-http-client#readme",
   "author": "Benjamin Kroeger <benjamin.kroeger@gmail.com>",
-  "files": ["lib", "plugins"],
+  "files": [
+    "lib",
+    "plugins"
+  ],
   "main": "lib/index.js",
-  "keywords": ["request", "plugin", "http"],
+  "keywords": [
+    "request",
+    "plugin",
+    "http"
+  ],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/benkroeger/oniyi-http-client.git"
