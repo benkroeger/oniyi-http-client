@@ -5,8 +5,8 @@
   "homepage": "https://github.com/benkroeger/oniyi-http-client#readme",
   "author": "Benjamin Kroeger <benjamin.kroeger@gmail.com>",
   "files": [
-    "lib",
-    "plugins"
+    "lib/",
+    "plugins/"
   ],
   "main": "lib/index.js",
   "keywords": [
@@ -19,19 +19,29 @@
     "url": "git+ssh://git@github.com/benkroeger/oniyi-http-client.git"
   },
   "devDependencies": {
-    "eslint": "^4.8.0",
-    "eslint-config-oniyi": "^5.0.2"
+    "eslint": "^4.9.0",
+    "eslint-config-oniyi": "^5.0.2",
+    "jsdoc-to-markdown": "3.0.0",
+    "prettier-eslint": "^8.2.1",
+    "prettier-eslint-cli": "^4.4.0"
   },
   "scripts": {
-    "lint": "eslint --ignore-path .gitignore ."
+    "format": "prettier-eslint --write \"lib/**/*.js\" \"plugins/**/*.js\" \"test/**/*.js\"",
+    "prelint": "npm run format",
+    "lint": "eslint --ignore-path .gitignore .",
+    "test": "ava --verbose",
+    "test:watch": "npm test -- --watch",
+    "coverage": "nyc npm test && nyc report --reporter=html",
+    "docs": "jsdoc2md lib/**/*.js > API.md"
   },
   "license": "MIT",
   "dependencies": {
     "async": "^2.5.0",
     "lodash": "^4.17.4",
+    "loopback-phase": "^3.1.0",
     "oniyi-logger": "^1.0.0",
-    "request": "^2.78.0",
-    "tough-cookie": "^2.3.2"
+    "request": "^2.83.0",
+    "tough-cookie": "^2.3.3"
   },
   "bugs": {
     "url": "https://github.com/benkroeger/oniyi-http-client/issues"
