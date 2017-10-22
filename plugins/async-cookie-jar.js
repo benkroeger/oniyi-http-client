@@ -11,10 +11,14 @@ const request = require('request');
 const requestJarPrototype = Object.getPrototypeOf(request.jar());
 
 function putCookiesInJar(setCookieHeaders, completeRequestURI, cookieJar, callback) {
-  const eachArray = (typeof setCookieHeaders === 'string') ? [setCookieHeaders] : setCookieHeaders;
-  async.each(eachArray, (setCookieHeader, iteratorCallback) => {
-    cookieJar.setCookie(setCookieHeader, completeRequestURI, iteratorCallback);
-  }, callback);
+  const eachArray = typeof setCookieHeaders === 'string' ? [setCookieHeaders] : setCookieHeaders;
+  async.each(
+    eachArray,
+    (setCookieHeader, iteratorCallback) => {
+      cookieJar.setCookie(setCookieHeader, completeRequestURI, iteratorCallback);
+    },
+    callback
+  );
 }
 
 function isRequestJar(jar) {

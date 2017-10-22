@@ -26,11 +26,12 @@ const client = oniyiHttpClient({
 
 const plugin1 = {
   name: 'plugin-1',
-  load: (req, params) => _.merge({}, params, {
-    headers: {
-      foo: 'bar',
-    },
-  }),
+  load: (req, params) =>
+    _.merge({}, params, {
+      headers: {
+        foo: 'bar',
+      },
+    }),
 };
 
 const plugin2 = {
@@ -46,7 +47,7 @@ const plugin2 = {
           'plugin-2': 'plugin-2',
         },
         callback: (err, response, body) => {
-          logger.info('Name in this plugin\'s store: %s', plugin2Storage.name);
+          logger.info("Name in this plugin's store: %s", plugin2Storage.name);
           logger.info(err);
           return originalCallback(err, response, body);
         },
@@ -61,11 +62,14 @@ const plugin3 = {
   name: 'plugin-3',
   load: (req, params, callback) => {
     setTimeout(() => {
-      callback(null, _.merge({}, params, {
-        headers: {
-          'plugin-3': 'plugin-3',
-        },
-      }));
+      callback(
+        null,
+        _.merge({}, params, {
+          headers: {
+            'plugin-3': 'plugin-3',
+          },
+        })
+      );
     }, 500);
   },
 };
@@ -84,7 +88,7 @@ const plugin4 = {
           'plugin-4': 'plugin-4',
         },
         callback: (err, response, body) => {
-          logger.info('Name in this plugin\'s store: %s', plugin4Storage.name);
+          logger.info("Name in this plugin's store: %s", plugin4Storage.name);
           return originalCallback(err, response, body);
         },
       });
@@ -101,22 +105,26 @@ client
   .use('async-cookie-jar');
 
 // client.makeRequest('http://httpbin.org/cookies/set?name=value', {
-client.makeRequest('/headers', {
-  method: 'GET',
-  // jar: client.jar(new redisStore(redisClient))
-}, (err, response, body) => {
-  if (err) {
-    if (err.stack) {
-      logger.error(err.stack);
-    } else {
-      logger.error(err);
+client.makeRequest(
+  '/headers',
+  {
+    method: 'GET',
+    // jar: client.jar(new redisStore(redisClient))
+  },
+  (err, response, body) => {
+    if (err) {
+      if (err.stack) {
+        logger.error(err.stack);
+      } else {
+        logger.error(err);
+      }
+      process.exit(0);
+    }
+    if (response) {
+      logger.debug('statusCode: %d', response.statusCode);
+      logger.debug('headers: ', response.headers);
+      logger.debug('body: ', body);
     }
     process.exit(0);
   }
-  if (response) {
-    logger.debug('statusCode: %d', response.statusCode);
-    logger.debug('headers: ', response.headers);
-    logger.debug('body: ', body);
-  }
-  process.exit(0);
-});
+);
