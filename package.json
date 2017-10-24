@@ -37,9 +37,9 @@
   "license": "MIT",
   "dependencies": {
     "async": "^2.5.0",
+    "debug": "^3.1.0",
     "lodash": "^4.17.4",
     "loopback-phase": "^3.1.0",
-    "oniyi-logger": "^1.0.0",
     "request": "^2.83.0",
     "tough-cookie": "^2.3.3"
   },

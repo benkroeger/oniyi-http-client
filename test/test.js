@@ -3,7 +3,6 @@
 // node core modules
 
 // 3rd party modules
-const logger = require('oniyi-logger')('oniyi-http-client:test');
 const _ = require('lodash');
 
 // internal modules
@@ -13,7 +12,6 @@ const oniyiHttpClient = require('../');
 
 // const redisClient = new makeRedisClient({});
 
-process.env.NODE_DEBUG = 'oniyi-http-client:test';
 const client = oniyiHttpClient({
   defaults: {
     baseUrl: 'http://httpbin.org',
@@ -47,8 +45,8 @@ const plugin2 = {
           'plugin-2': 'plugin-2',
         },
         callback: (err, response, body) => {
-          logger.info("Name in this plugin's store: %s", plugin2Storage.name);
-          logger.info(err);
+          console.log("Name in this plugin's store: %s", plugin2Storage.name);
+          console.log(err);
           return originalCallback(err, response, body);
         },
       });
@@ -88,7 +86,7 @@ const plugin4 = {
           'plugin-4': 'plugin-4',
         },
         callback: (err, response, body) => {
-          logger.info("Name in this plugin's store: %s", plugin4Storage.name);
+          console.log("Name in this plugin's store: %s", plugin4Storage.name);
           return originalCallback(err, response, body);
         },
       });
@@ -114,16 +112,16 @@ client.makeRequest(
   (err, response, body) => {
     if (err) {
       if (err.stack) {
-        logger.error(err.stack);
+        console.error(err.stack);
       } else {
-        logger.error(err);
+        console.error(err);
       }
       process.exit(0);
     }
     if (response) {
-      logger.debug('statusCode: %d', response.statusCode);
-      logger.debug('headers: ', response.headers);
-      logger.debug('body: ', body);
+      console.log('statusCode: %d', response.statusCode);
+      console.log('headers: ', response.headers);
+      console.log('body: ', body);
     }
     process.exit(0);
   }
