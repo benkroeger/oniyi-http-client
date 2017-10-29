@@ -1,14 +1,19 @@
 'use strict';
 
-process.env.NODE_DEBUG = 'oniyi-http-client:test';
+// node core modules
+
+// 3rd party modules
 const logger = require('oniyi-logger')('oniyi-http-client:test');
 const _ = require('lodash');
+
+// internal modules
 const oniyiHttpClient = require('../');
 // const redisStore = require('tough-cookie-redis-store');
 // const makeRedisClient = require('make-redis-client');
 
 // const redisClient = new makeRedisClient({});
 
+process.env.NODE_DEBUG = 'oniyi-http-client:test';
 const client = oniyiHttpClient({
   defaults: {
     baseUrl: 'http://httpbin.org',
