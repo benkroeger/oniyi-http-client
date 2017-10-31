@@ -19,11 +19,14 @@
     "url": "git+ssh://git@github.com/benkroeger/oniyi-http-client.git"
   },
   "devDependencies": {
+    "ava": "^0.22.0",
     "eslint": "^4.9.0",
     "eslint-config-oniyi": "^5.0.2",
+    "eslint-plugin-ava": "^4.2.1",
     "jsdoc-to-markdown": "3.0.0",
     "prettier-eslint": "^8.2.1",
-    "prettier-eslint-cli": "^4.4.0"
+    "prettier-eslint-cli": "^4.4.0",
+    "nyc": "11.2.1"
   },
   "scripts": {
     "format": "prettier-eslint --write \"lib/**/*.js\" \"plugins/**/*.js\" \"test/**/*.js\"",
@@ -40,6 +43,7 @@
     "debug": "^3.1.0",
     "lodash": "^4.17.4",
     "loopback-phase": "^3.1.0",
+    "oniyi-logger": "^1.0.0",
     "request": "^2.83.0",
     "tough-cookie": "^2.3.3"
   },
