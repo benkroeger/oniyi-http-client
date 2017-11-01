@@ -10,8 +10,6 @@ module.exports = {
   name: plugin1,
   load: (req, params, callback) => {
     setTimeout(() => {
-      const originalCallback = params.callback;
-
       // update params with some changes
       const updatedParams = _.merge(params, {
         headers: {
@@ -19,13 +17,9 @@ module.exports = {
         },
         foo: fooPlugin1,
         uri: uriPlugin1,
-        callback: (err, response, body) => {
-          // TODO: validate response phase list
-          return originalCallback(err, response, body);
-        },
       });
 
       callback(null, updatedParams);
-    }, 500);
+    }, 300);
   },
 };

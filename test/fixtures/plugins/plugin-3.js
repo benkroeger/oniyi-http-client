@@ -21,7 +21,6 @@ module.exports = {
         validateHeaders: validateParamsOrder(paramsPlugin, plugin2),
       };
 
-      const originalCallback = params.callback;
       const newParams = _.merge(params, {
         headers: {
           plugin3: 'plugin3',
@@ -29,13 +28,9 @@ module.exports = {
         foo: 'plugin3 foo updated',
         uri: 'plugin3/uri/updated',
         plugin3propsValidations,
-        callback: (err, response, body) => {
-          // TODO: validate response phase list
-          return originalCallback(err, response, body);
-        },
       });
 
       callback(null, newParams);
-    }, 500);
+    }, 300);
   },
 };
