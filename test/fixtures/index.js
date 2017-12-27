@@ -16,9 +16,7 @@ const init = () => {
         Host: 'apps.na.collabserv.com',
       },
     },
-    phaseLists: {
-      requestPhaseNames: ['initial', 'foo', 'bar', 'final'],
-    },
+    requestPhases: ['initial', 'foo', 'bar', 'final'],
     plugins: [plugins.plugin1],
   };
 

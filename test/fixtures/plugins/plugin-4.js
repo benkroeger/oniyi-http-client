@@ -15,10 +15,10 @@ module.exports = {
         headers: {
           plugin4: 'plugin4',
         },
-        callback: (err, response, body) => {
+        callback: (err, response, body) =>
           // TODO: validate response phase list
-          return originalCallback(err, response, body);
-        },
+          originalCallback(err, response, body)
+        ,
       });
 
       callback(null, newParams);

@@ -18,28 +18,33 @@ const { validateParamsOrder } = require('./utils');
 
 module.exports = {
   name: plugin2,
-  load: (req, params, callback) => {
-    setTimeout(() => {
-      const { foo, uri, headers: { plugin1: paramsPlugin } } = params;
+  onRequest: [
+    {
+      phaseName: 'initial',
+      handler: (ctx, next) => {
+        setTimeout(() => {
+          const { foo, uri, headers: { plugin1: paramsPlugin } } = ctx.options;
 
-      // this plugin should be run after plugin-1, and
-      // receive all changes made on params object
-      const plugin2propsValidations = {
-        validateFoo: validateParamsOrder(foo, fooPlugin1),
-        validateUri: validateParamsOrder(uri, uriPlugin1),
-        validateHeaders: validateParamsOrder(paramsPlugin, plugin1),
-      };
+          // this plugin should be run after plugin-1, and
+          // receive all changes made on params object
+          const plugin2propsValidations = {
+            validateFoo: validateParamsOrder(foo, fooPlugin1),
+            validateUri: validateParamsOrder(uri, uriPlugin1),
+            validateHeaders: validateParamsOrder(paramsPlugin, plugin1),
+          };
 
-      const updatedParams = _.merge(params, {
-        headers: {
-          plugin2,
-        },
-        foo: fooPlugin2,
-        uri: uriPlugin2,
-        plugin2propsValidations,
-      });
+          _.merge(ctx.options, {
+            headers: {
+              plugin2,
+            },
+            foo: fooPlugin2,
+            uri: uriPlugin2,
+            plugin2propsValidations,
+          });
 
-      callback(null, updatedParams);
-    }, 300);
-  },
+          next(null, ctx);
+        }, 300);
+      },
+    },
+  ],
 };
