@@ -73,8 +73,19 @@ const client = httpClientFactory({
 ### onRequest
 `onRequest` is one of the (currently) two hooks that executes registered plugins in the defined phases. After all phases have run their handlers successfully, the resulting request options from `ctx.options` are used to initiate a new `request.Request`. The return value from `request.Request` (a readable and writable stream) is what the returned `Promise` from any of the request initiating methods from `client` (`makeRequest`, `get`, `put`, `post`, ...) resolves to.
 
+Handlers in this phaseList are invoked with (`ctx`, `next`), where `ctx` has the following members:
+* `hookState`
+* `options`
+
 ### onResponse
 `onResponse` is the second hook and executes registered plugins after receiving the response from `request` but before invoking `callback` from the request execution. That means plugins using this hook / phases can work with and modify `err, response, body` before the app's `callback` function is invoked. Here you can do things like validating response's `statusCode`, parsing response data (e.g. xml to json), caching, reading `set-cookie` headers and persist in async cookie jars... the possibilities are wide.
+
+Handlers in this phaseList are invoked with (`ctx`, `next`), where `ctx` has the following members:
+* `hookState`
+* `options`
+* `response`
+* `responseError`
+* `responseBody`
 
 ## Using plugins
 
