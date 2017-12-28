@@ -33,22 +33,6 @@ test('throws when plugin is not a plain object', (t) => {
 
   const error = t.throws(() => mountPlugin(httpClient, phaseLists, false), TypeError);
   t.is(error.message, 'plugin argument must be plain object');
-  // t.is(returnValue, client);
-  // const spy = sinon.spy(helpers, 'mountPlugin');
-  // const otherUseArgs = [1, 2, 3, 4];
-  //
-  // client.use(noopPlugin, ...otherUseArgs);
-  //
-  // t.true(spy.calledOnce);
-  // t.true(spy.alwaysReturned(client));
-  //
-  // const spyCall = spy.firstCall;
-  // spy.restore();
-  //
-  // const [arg1, , arg3, ...otherSpyArgs] = spyCall.args;
-  // t.is(arg1, client);
-  // t.is(arg3, noopPlugin);
-  // t.deepEqual(otherSpyArgs, otherUseArgs);
 });
 
 test('throws when plugin.name is not a string', (t) => {
