@@ -5,17 +5,17 @@ import test from 'ava';
 import _ from 'lodash';
 
 // internal modules
-import httpClientFactory from '../lib/http-client';
+import httpClient from '../lib/http-client';
 
 (() => {
-  const client = httpClientFactory();
+  const client = httpClient();
   ['use', 'makeRequest', 'get', 'put', 'post', 'del', 'head', 'options'].forEach(methodName =>
     test(`client instance exposes method '${methodName}'`, t =>
       t.true(_.isFunction(client[methodName]), `client should have "${methodName}" method`)));
 })();
 
 (() => {
-  const client = httpClientFactory();
+  const client = httpClient();
   ['makeRequest', 'get', 'put', 'post', 'del', 'head', 'options'].forEach(methodName =>
     test(`'${methodName}' method returns a Promise `, (t) => {
       const returnValue = client[methodName]();
@@ -25,7 +25,7 @@ import httpClientFactory from '../lib/http-client';
 })();
 
 test("'use' method returns client instance", (t) => {
-  const client = httpClientFactory();
+  const client = httpClient();
   const returnValue = client.use({ name: 'noop' });
 
   t.is(returnValue, client);
