@@ -30,14 +30,3 @@ test("'use' method returns client instance", (t) => {
 
   t.is(returnValue, client);
 });
-
-
-// test.cb('simple request', (t) => {
-//   const client = httpClientFactory({});
-//
-//   client.get('http://httpstat.us/200', (err, response, body) => {
-//     t.ifError(err);
-//     t.log(body);
-//     t.end();
-//   });
-// });
