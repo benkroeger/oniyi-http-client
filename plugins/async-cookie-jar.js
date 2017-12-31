@@ -4,6 +4,7 @@
 
 // 3rd party modules
 const async = require('async');
+const _ = require('lodash');
 const request = require('request');
 
 // internal modules
@@ -11,10 +12,14 @@ const request = require('request');
 const requestJarPrototype = Object.getPrototypeOf(request.jar());
 
 function putCookiesInJar(setCookieHeaders, completeRequestURI, cookieJar, callback) {
-  const eachArray = (typeof setCookieHeaders === 'string') ? [setCookieHeaders] : setCookieHeaders;
-  async.each(eachArray, (setCookieHeader, iteratorCallback) => {
-    cookieJar.setCookie(setCookieHeader, completeRequestURI, iteratorCallback);
-  }, callback);
+  const eachArray = typeof setCookieHeaders === 'string' ? [setCookieHeaders] : setCookieHeaders;
+  async.each(
+    eachArray,
+    (setCookieHeader, iteratorCallback) => {
+      cookieJar.setCookie(setCookieHeader, completeRequestURI, iteratorCallback);
+    },
+    callback
+  );
 }
 
 function isRequestJar(jar) {
@@ -27,47 +32,65 @@ function isRequestJar(jar) {
 
 module.exports = {
   name: 'async-cookie-jar',
-  load: (req, oParams, callback) => {
-    // skip if we have a cookie jar that can be handled by the request module
-    if (isRequestJar(oParams.jar)) {
-      callback(null, oParams);
-      return;
-    }
-
-    const params = Object.assign({}, oParams);
-    const cookieJar = params.jar;
-
-    // retrieve cookies from jar asynchronously
-    cookieJar.getCookieString(params.uri.href, (err, cookieString) => {
-      if (err) {
-        callback(err);
-        return;
-      }
-
-      // remove cookieJar from the params so that "request" doesn't try to handle it
-      delete params.jar;
-
-      // write cookies from jar to the request headers,
-      // don't override existing cookies
-      params.headers = params.headers || {};
-      params.headers.cookie = cookieString + (params.headers.cookie ? `; ${params.headers.cookie}` : '');
-
-      // the "response" event is emitted on each response, that includes redirects
-      req.on('response', (response) => {
-        // do we have a response object including the set-cookie header
-        if (response && response.headers && response.headers['set-cookie']) {
-          const completeRequestURI = response.request.uri.href;
-
-          // write received cookies to our jar
-          putCookiesInJar(response.headers['set-cookie'], completeRequestURI, cookieJar, (cookieErr) => {
-            if (cookieErr) {
-              req.emit('error', cookieErr);
-            }
-          });
+  onRequest: [
+    {
+      phaseName: 'initial',
+      handler: (ctx, next) => {
+        const { options, hookState } = ctx;
+        const { jar: cookieJar } = options;
+        // skip if we have a cookie jar that can be handled by the request module
+        if (isRequestJar(cookieJar)) {
+          next();
+          return;
         }
-      });
 
-      callback(null, params);
-    });
-  },
+        Object.assign(hookState, {
+          isAsyncCookieJar: true,
+          cookieJar,
+        });
+
+        // retrieve cookies from jar asynchronously
+        cookieJar.getCookieString(options.uri.href, (err, cookieString) => {
+          if (err) {
+            next(err);
+            return;
+          }
+
+          // remove cookieJar from the options so that "request" doesn't try to handle it
+          delete options.jar;
+
+          // write cookies from jar to the request headers,
+          // don't override existing cookies
+          _.set(options, 'headers.cookie', `${cookieString}; ${_.get(options, 'headers.cookie', '')}`);
+
+          next();
+        });
+      },
+    },
+  ],
+  onResponse: [
+    {
+      phaseName: 'initial',
+      handler: (ctx, next) => {
+        const { hookState, response } = ctx;
+        if (!hookState.isAsyncCookieJar) {
+          next();
+          return;
+        }
+
+        const setCookie = _.get(response, 'headers.set-cookie');
+
+        if (!setCookie) {
+          next();
+          return;
+        }
+        // do we have a response object including the set-cookie header
+        const completeRequestURI = _.get(response, 'request.uri.href');
+        const { cookieJar } = hookState;
+
+        // write received cookies to our jar
+        putCookiesInJar(setCookie, completeRequestURI, cookieJar, next);
+      },
+    },
+  ],
 };
