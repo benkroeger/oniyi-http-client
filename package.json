@@ -35,7 +35,7 @@
     "test": "ava --verbose",
     "test:watch": "npm test -- --watch",
     "coverage": "nyc npm test && nyc report --reporter=html",
-    "docs": "jsdoc2md lib/**/*.js > API.md"
+    "docs": "jsdoc2md --files \"lib/**/*.js\" --template jsdoc2md/README.hbs --heading-depth 3 > README.md"
   },
   "license": "MIT",
   "dependencies": {

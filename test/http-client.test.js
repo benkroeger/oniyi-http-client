@@ -9,7 +9,7 @@ import httpClient from '../lib/http-client';
 
 (() => {
   const client = httpClient();
-  ['use', 'makeRequest', 'get', 'put', 'post', 'del', 'head', 'options'].forEach(methodName =>
+  ['jar', 'use', 'makeRequest', 'get', 'put', 'post', 'del', 'head', 'options'].forEach(methodName =>
     test(`client instance exposes method '${methodName}'`, t =>
       t.true(_.isFunction(client[methodName]), `client should have "${methodName}" method`)));
 })();
