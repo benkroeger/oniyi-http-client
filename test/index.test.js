@@ -7,11 +7,23 @@ import _ from 'lodash';
 // internal modules
 import oniyiHttpClient from '../lib';
 
-test('main export is a function', (t) => {
-  t.true(_.isFunction(oniyiHttpClient));
-});
+(() => {
+  ['create', 'jar', 'use', 'makeRequest', 'get', 'put', 'post', 'del', 'head', 'options'].forEach(methodName =>
+    test(`oniyiHttpClient instance exposes method '${methodName}'`, t =>
+      t.true(_.isFunction(oniyiHttpClient[methodName]), `oniyiHttpClient should have "${methodName}" method`)));
+})();
 
-test('client instance created with main export has `jar` method', (t) => {
-  const client = oniyiHttpClient({});
-  t.true(_.isFunction(client.jar));
+(() => {
+  ['makeRequest', 'get', 'put', 'post', 'del', 'head', 'options'].forEach(methodName =>
+    test(`'${methodName}' method returns a Promise `, (t) => {
+      const returnValue = oniyiHttpClient[methodName]();
+      const resolved = Promise.resolve(returnValue);
+      t.is(returnValue, resolved);
+    }));
+})();
+
+test("'use' method returns client instance", (t) => {
+  const returnValue = oniyiHttpClient.use({ name: 'noop' });
+
+  t.is(returnValue, oniyiHttpClient);
 });

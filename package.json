@@ -1,6 +1,6 @@
 {
   "name": "oniyi-http-client",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Adding a plugin interface to \"request\" that allows modifications of request parameters and response data",
   "homepage": "https://github.com/benkroeger/oniyi-http-client#readme",
   "author": "Benjamin Kroeger <benjamin.kroeger@gmail.com>",
@@ -35,7 +35,7 @@
     "test": "ava --verbose",
     "test:watch": "npm test -- --watch",
     "coverage": "nyc npm test && nyc report --reporter=html",
-    "docs": "jsdoc2md lib/**/*.js > API.md"
+    "docs": "jsdoc2md --files \"lib/**/*.js\" --template jsdoc2md/README.hbs --heading-depth 3 > README.md"
   },
   "license": "MIT",
   "dependencies": {
