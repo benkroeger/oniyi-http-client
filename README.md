@@ -450,7 +450,7 @@ mutable context object that gets passed through all phases in the `onResponse` p
 | --- | --- | --- |
 | hookState | [<code>Hookstate</code>](#Hookstate) | this is the [Hookstate](#Hookstate) instance from                                          this request's [OnRequestContext](#OnRequestContext) |
 | options | <code>Object</code> | the options property frtom this request's [OnRequestContext](#OnRequestContext)                                          ([request options](https://github.com/request/request#requestoptions-callback)) |
-| requestError | <code>Error</code> | an error when applicable (usually from                                          ([http.ClientRequest](http://nodejs.org/api/http.html#http_class_http_clientrequest)) object) |
+| [requestError] | <code>Error</code> | an error when applicable (usually from                                          ([http.ClientRequest](http://nodejs.org/api/http.html#http_class_http_clientrequest)) object) |
 | responseBody | <code>Object</code> | the response body (String or Buffer, or JSON object if the json option is supplied) |
 | response | <code>Object</code> | an http.IncomingMessage                                          ([http.IncomingMessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage))                                          object (Response object) |
 
