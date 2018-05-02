@@ -246,7 +246,7 @@ const customClient = httpClient.create({
 * [HttpClient](#HttpClient)
     * [.#defaults()](#HttpClient+defaults) ⇒ <code>Object</code>
     * [.#jar([store])](#HttpClient+jar) ⇒ <code>Object</code>
-    * [.#use(plugin, [options])](#HttpClient+use) ⇒ <code>Object</code>
+    * [.#use(plugin, [options])](#HttpClient+use) ⇒ [<code>HttpClient</code>](#HttpClient)
     * [.#makeRequest(uri, [options], [callback])](#HttpClient+makeRequest) ⇒ [<code>RequestPromise</code>](#RequestPromise)
     * [.#get(uri, [options], [callback])](#HttpClient+get) ⇒ [<code>RequestPromise</code>](#RequestPromise)
     * [.#put(uri, [options], [callback])](#HttpClient+put) ⇒ [<code>RequestPromise</code>](#RequestPromise)
@@ -277,9 +277,9 @@ for creation when `store` is not async, `tough.CookieJar(store)` instead.
 
 <a name="HttpClient+use"></a>
 
-#### httpClient.#use(plugin, [options]) ⇒ <code>Object</code>
+#### httpClient.#use(plugin, [options]) ⇒ [<code>HttpClient</code>](#HttpClient)
 **Kind**: instance method of [<code>HttpClient</code>](#HttpClient)  
-**Returns**: <code>Object</code> - a clone of this instance's defaults object  
+**Returns**: [<code>HttpClient</code>](#HttpClient) - this [HttpClient](#HttpClient) instance  
 
 | Param | Type |
 | --- | --- |
