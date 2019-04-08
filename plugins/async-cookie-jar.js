@@ -61,7 +61,11 @@ module.exports = {
 
           // write cookies from jar to the request headers,
           // don't override existing cookies
-          _.set(options, 'headers.cookie', `${cookieString}; ${_.get(options, 'headers.cookie', '')}`);
+          _.set(
+            options,
+            'headers.cookie',
+            `${cookieString}; ${_.get(options, 'headers.cookie', '')}`
+          );
 
           next();
         });
