@@ -22,8 +22,8 @@
     "ava": "^1.4.1",
     "eslint": "^5.16.0",
     "eslint-config-oniyi": "^6.0.0",
-    "jsdoc-to-markdown": "^4.0.1",
-    "nyc": "^13.3.0",
+    "jsdoc-to-markdown": "^5.0.0",
+    "nyc": "^14.1.1",
     "prettier-eslint-cli": "^4.7.1",
     "sinon": "^7.3.1"
   },
