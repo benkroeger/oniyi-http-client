@@ -1,16 +1,18 @@
 # Oniyi Http Client
+
 > Adding a plugin interface to [request](https://www.npmjs.com/package/request) that allows modifications of request parameters and response data
 
 ## Installation
 
 ```sh
-$ npm install --save oniyi-http-client
+npm install --save oniyi-http-client
 ```
 
 ## Usage
 
-   *Use default instance*  
-  ```js
+### Use default instance
+
+```js
 const httpClient = require('oniyi-http-client');
 httpClient.get('http://httpbin.org/headers', {}, (err, response, body) => {
  if (err) {
@@ -21,8 +23,9 @@ httpClient.get('http://httpbin.org/headers', {}, (err, response, body) => {
 });
 ```
 
-   *with request defaults*  
-  ```js
+### with request defaults
+
+```js
 const httpClient = require('oniyi-http-client');
 const customClient = httpClient.create({
  defaults: {
@@ -42,8 +45,10 @@ customClient.get('http://httpbin.org/headers', {}, (err, response, body) => {
  // will log `foo`
 });
 ```
-   *with custom phases*  
-  ```js
+
+### with custom phases
+
+```js
 const httpClient = require('oniyi-http-client');
 const customClient = httpClient.create({
  requestPhases: ['early', 'initial', 'middle', 'final'],
@@ -52,6 +57,7 @@ const customClient = httpClient.create({
 ```
 
 ## Motivation
+
 "Is there really a need for another http library?" you might ask. There isn't. The actual need is for
 the ability to asynchronously hook into the process of making a http request or receiving a response.
 
@@ -64,7 +70,8 @@ manually resolve before invoking e.g. [`request`](https://www.npmjs.com/package/
 Instead I thought it would be much easier to pass the user along with the request options and have
 some other module take care of resolving and injecting credentials.
 
-Quickly more use-cases come to mind:
+Quickly more use-cases come to mind:  
+
 * [credentials](https://www.npmjs.com/package/oniyi-http-plugin-credentials)
 * async cookie jars
 * [caching](https://www.npmjs.com/package/oniyi-cache)
@@ -78,6 +85,7 @@ by using e.g. [oniyi-http-plugin-format-url-template](https://www.npmjs.com/pack
 in a late phase (`final`) of the onRequest PhaseLists.
 
 ## Phases
+
 This HTTP Client supports running multiple plugins / hooks in different phases before making a request
 as well as after receiving a response. Both [PhaseLists](https://github.com/strongloop/loopback-phase/blob/master/lib/phase-list.js)
 are initiated with the phases `initial` and `final` and [zipMerged](https://github.com/strongloop/loopback-phase/blob/master/lib/phase-list.js#L164)
@@ -85,6 +93,7 @@ with `params.requestPhases` and `params.responsePhases` respectively. That means
 by providing them in the factory params.
 
 *with custom phases*
+
   ```js
 const httpClient = require('oniyi-http-client');
 const customClient = httpClient.create({
@@ -94,6 +103,7 @@ const customClient = httpClient.create({
 ```
 
 ### onRequest
+
 `onRequest` is one of the (currently) two hooks that executes registered plugins in the defined phases.
 After all phases have run their handlers successfully, the resulting request options from `ctx.options`
 are used to initiate a new `request.Request`. The return value from `request.Request` (a readable and
@@ -104,6 +114,7 @@ Handlers in this phaseList must comply with [PluginHookHandler](#PluginHookHandl
 The received context argument is an [OnRequestContext](#OnRequestContext) .
 
 ### onResponse
+
 `onResponse` is the second hook and executes registered plugins after receiving the response from `request`
 but before invoking `callback` from the request execution. That means plugins using this hook / phases can
 work with and modify `err, response, body` before the app's `callback` function is invoked. Here you can do
