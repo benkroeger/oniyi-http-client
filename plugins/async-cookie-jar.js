@@ -50,7 +50,7 @@ module.exports = {
         });
 
         // retrieve cookies from jar asynchronously
-        cookieJar.getCookieString(options.uri.href, (err, cookieString) => {
+        cookieJar.getCookieString(options.uri, (err, cookieString) => {
           if (err) {
             next(err);
             return;
