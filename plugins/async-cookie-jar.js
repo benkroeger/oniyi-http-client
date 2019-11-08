@@ -11,14 +11,26 @@ const request = require('request');
 
 const requestJarPrototype = Object.getPrototypeOf(request.jar());
 
-function putCookiesInJar(setCookieHeaders, completeRequestURI, cookieJar, callback) {
-  const eachArray = typeof setCookieHeaders === 'string' ? [setCookieHeaders] : setCookieHeaders;
+function putCookiesInJar(
+  setCookieHeaders,
+  completeRequestURI,
+  cookieJar,
+  callback,
+) {
+  const eachArray =
+    typeof setCookieHeaders === 'string'
+      ? [setCookieHeaders]
+      : setCookieHeaders;
   async.each(
     eachArray,
     (setCookieHeader, iteratorCallback) => {
-      cookieJar.setCookie(setCookieHeader, completeRequestURI, iteratorCallback);
+      cookieJar.setCookie(
+        setCookieHeader,
+        completeRequestURI,
+        iteratorCallback,
+      );
     },
-    callback
+    callback,
   );
 }
 
@@ -64,7 +76,7 @@ module.exports = {
           _.set(
             options,
             'headers.cookie',
-            `${cookieString}; ${_.get(options, 'headers.cookie', '')}`
+            `${cookieString}; ${_.get(options, 'headers.cookie', '')}`,
           );
 
           next();
