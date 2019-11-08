@@ -19,18 +19,22 @@
     "url": "git+ssh://git@github.com/benkroeger/oniyi-http-client.git"
   },
   "devDependencies": {
-    "ava": "^1.4.1",
-    "eslint": "^5.16.0",
-    "eslint-config-oniyi": "^6.0.1",
+    "ava": "^2.4.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-ava": "^9.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
     "jsdoc-to-markdown": "^5.0.2",
     "nyc": "^14.1.1",
-    "prettier-eslint-cli": "^4.7.1",
+    "prettier": "^1.18.2",
     "sinon": "^7.5.0"
   },
   "scripts": {
-    "format": "prettier-eslint --write \"lib/**/*.js\" \"plugins/**/*.js\"",
+    "format": "prettier --write \"**/*.{js,json}\"",
     "prelint": "npm run format",
-    "lint": "eslint --ignore-path .gitignore .",
+    "lint": "eslint .",
     "test": "ava --verbose",
     "test:watch": "npm test -- --watch",
     "coverage": "nyc npm test && nyc report --reporter=html",
@@ -38,12 +42,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "async": "^2.6.2",
+    "async": "^3.1.0",
     "debug": "^4.1.1",
     "lodash": "^4.17.15",
     "loopback-phase": "^3.1.0",
     "request": "^2.86.0",
-    "tough-cookie": "^2.3.4"
+    "tough-cookie": "^3.0.1"
   },
   "bugs": {
     "url": "https://github.com/benkroeger/oniyi-http-client/issues"
