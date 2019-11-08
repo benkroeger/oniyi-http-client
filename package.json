@@ -19,7 +19,7 @@
     "url": "git+ssh://git@github.com/benkroeger/oniyi-http-client.git"
   },
   "devDependencies": {
-    "ava": "^1.4.1",
+    "ava": "^2.4.0",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.5.0",
