@@ -34,4 +34,22 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ['**/*.test.js'],
+      parserOptions: {
+        ecmaVersion: 2017,
+        sourceType: 'module',
+      },
+      extends: 'plugin:ava/recommended',
+      plugins: ['ava'],
+
+      rules: {
+        'import/no-extraneous-dependencies': [
+          'error',
+          { devDependencies: true },
+        ],
+      },
+    },
+  ],
 };
